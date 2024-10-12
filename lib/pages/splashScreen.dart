@@ -29,7 +29,7 @@ class _splashScreenState extends State<splashScreen> {
         alignment: Alignment.center,
         children: [
           Image.asset(
-            "images/adr.jpg",
+            "images/pro1.jpg",
             height: double.infinity,
             // width: double.infinity,
             fit: BoxFit.fitHeight,

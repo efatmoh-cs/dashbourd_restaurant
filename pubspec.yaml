@@ -29,6 +29,8 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   http: ^1.2.1
+  image_picker: ^0.8.3+2
+#  image_picker: ^1.1.2
 #  http: ^0.14.0
   font_awesome_flutter: ^10.7.0
   flutter:

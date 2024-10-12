@@ -62,29 +62,6 @@ class MyAppState extends State<MyApp> {
       // )
 
     );
-    // theme: ThemeData(fontFamily: 'GE_ar'),
-    // debugShowCheckedModeBanner: false,
-    // home: new SplashScreen(
-    //   seconds: 3,
-    //   routeName: "/",
-    //   // navigateAfterSeconds:
-    //   // G_use_id_val == null ? new Login() : new Home(),
-    //   title: new Text(
-    //     'مرحبا بكم في تطبيق ادارة المطعم',
-    //     style: new TextStyle(
-    //         fontWeight: FontWeight.bold,
-    //         fontSize: 20.0,
-    //         color: Colors.white),
-    //   ),
-    //   /*image: new Image.network(
-    //   'https://flutter.io/images/catalog-widget-placeholder.png'),*/
-    //   backgroundColor: ,
-    //   styleTextUnderTheLoader: new TextStyle(),
-    //   photoSize: 100.0,
-    //   onClick: () => print("restaurant"),
-    //   loaderColor: Colors.white,
-    // ));
-
   }
 }
 //////////////////////////////////////////////////////////////////////////

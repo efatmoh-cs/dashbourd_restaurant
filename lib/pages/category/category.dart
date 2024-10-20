@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -9,210 +10,164 @@ import 'package:http/http.dart' as http;
 
 import 'add.dart';
 
-
-class category extends StatefulWidget {
+class product extends StatefulWidget {
+  const product({super.key});
 
   @override
-  State<category> createState() => _categoryState();
+  State<product> createState() => _productState();
 }
 
-class _categoryState extends State<category> {
-  // var myprod = [
-  //   {
-  //     'pro_id': '1',
-  //     "pro_name": 'cat1',
-  //     "pro_price": 'cat1',
-  //     "pro_image": 'images/cat1.png',
-  //   },
-  //   {
-  //     'pro_id': '2',
-  //     "pro_name": 'cat1',
-  //     "pro_price": '100',
-  //     "pro_image": 'images/cat1.png',
-  //   },
-  //   {
-  //     'pro_id': '3',
-  //     "pro_name": 'cat1',
-  //     "pro_price": '200',
-  //     "pro_image": 'images/cat1.png',
-  //   },
-  //   {
-  //     'pro_id': '1',
-  //     "pro_name": 'cat1',
-  //     "pro_price": 'cat1',
-  //     "pro_image": 'images/cat1.png',
-  //   },
-  //   {
-  //     'pro_id': '1',
-  //     "pro_name": 'cat1',
-  //     "pro_price": 'cat1',
-  //     "pro_image": 'images/cat1.png',
-  //   },
-  //   {
-  //     'pro_id': '1',
-  //     "pro_name": 'cat1',
-  //     "pro_price": 'cat1',
-  //     "pro_image": 'images/cat1.png',
-  //   },
-  //   {
-  //     'pro_id': '1',
-  //     "pro_name": 'cat1',
-  //     "pro_price": 'cat1',
-  //     "pro_image": 'images/cat1.png',
-  //   },
-  // ];
-// List list=[];
-// Future ReadData() async {
-//   var url = 'http:// 192.168.1.2/flutter_restrant/library/function.php';
-//   var res = await http.get(Uri.parse(uri));
-//   if (res.statusCode == 200){
-//     var red=jsonDecode(res.body);
-//   }
-  List data = [];
+class _productState extends State<product> {
 
 
-  fetchData() async {
-    final response = await http.get(Uri.parse('http:// 192.168.43.68/flutter_restrant/library/function.php'));
+  // List to hold data fetched from the server
+  List products = [];
+
+  // Function to fetch data from PHP API
+  Future<void> fetchProducts() async {
+    final response = await http.get(Uri.parse('http://192.168.43.68/flutter_restrant/library/fetchcategory.php'));
 
     if (response.statusCode == 200) {
+      // If the server returns a 200 OK response, parse the JSON
       setState(() {
-        data = json.decode(response.body);
+        products = json.decode(response.body);
       });
-      print(data);
     } else {
-      throw Exception('Failed to load data');
+      throw Exception('Failed to load products');
     }
-}
-
-  // List list = [];
-  // Future ReadData() async {
-  //   var url = 'http://192.168.1.2/flutter_restrant/library/function.php';
-  //   var res = await http.get(Uri.parse(url));
-  //   if (res.statusCode == 200) {
-  //     var red = json.decode(res.body);
-  //     setState(() {
-  //       list.addAll(red);
-  //     });
-  //     print(list);
-  //   }
-  // }
+  }
 
   @override
   void initState() {
     super.initState();
-    getData();
+    // Fetch data when the widget is initialized
+    fetchProducts();
   }
-  getData()async{
-    await fetchData();
-  }
-
-
-  //
-  // fetchData() async {
-  //   final response = await http.get(Uri.parse('http://192.168.1.2/flutter_restrant/library/function.php'));
-  //
-  //   if (response.statusCode == 200) {
-  //     setState(() {
-  //       data = json.decode(response.body);
-  //     });
-  //   } else {
-  //     throw Exception('Failed to load data');
-  //   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(centerTitle: true,
+      appBar: AppBar(
+        title: Text('قائمه الصنيفات'),
         backgroundColor: Colors.red,
-        title: Text('ادارة المطعم',
-            style: TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 20, color: Colors.white)),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          // height: 700,
-          width: MediaQuery.of(context).size.width,
-          child: ListView.builder(
-              itemCount: data.length,
-              itemBuilder: (BuildContext context, int index) {
-                return
-                    ListTile(
-                      title: Text('name'),
+      body: products.isEmpty
+          ? Center(child: CircularProgressIndicator()) // Show loader if data is not fetched yet
+          : ListView.builder(
+        itemCount: products.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(products[index]['cat_name']),
+             subtitle: Text(products[index]['cat_kind']),
+          );
+        },
+      )
+        ,bottomNavigationBar: Padding(
+    padding: const EdgeInsets.only(bottom: 0, left: 1, right: 1),
 
-                        // list[index]['cat_name']
-                      subtitle: Text('kind'),
-                        // list[index]['cat_kind']
-                    );
-                //   SingleProduct(
-                //   pro_id: myprod[index]['pro_id'],
-                //   pro_image: myprod[index]['pro_image'],
-                //   pro_name: myprod[index]['pro_name'],
-                //   pro_price: myprod[index]['pro_price'],
-                //   pro_opg: myprod[index]['pro_opg'],
-                // );
-              }),
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(bottom: 0, left: 1, right: 1),
+    child: Container(height: 55,
+    child: Column(
+    children: [
 
-        child: Container(height: 55,
-          child: Column(
-            children: [
+    Padding(
+    padding: const EdgeInsets.only(top: 0),
+    child: Container(
+    height: 50,
+    decoration: BoxDecoration(
+    color: Colors.red,
 
-              Padding(
-                padding: const EdgeInsets.only(top: 0),
-                child: Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                      color: Colors.red,
-                      // gradient: LinearGradient(     ///////line shadow white
-                      //     begin: Alignment.topCenter,
-                      //     end: Alignment.bottomCenter,
-                      //     colors: <Color>[
-                      //       Colors.yellow,
-                      //       Colors.red, Colors.yellowAccent, Colors.red,
-                      //     ]),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey,
-                          spreadRadius: 1,
-                          blurRadius: 1,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
-                      borderRadius: BorderRadius.circular(30)),
-                  child: Row(mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+    boxShadow: [
+    BoxShadow(
+    color: Colors.grey,
+    spreadRadius: 1,
+    blurRadius: 1,
+    offset: Offset(0, 2),
+    ),
+    ],
+    borderRadius: BorderRadius.circular(30)),
+    child: Row(mainAxisAlignment: MainAxisAlignment.center,
+    children: [
 
 
-                      Container(
+    Container(
 
-                        child: GestureDetector(
-                          onTap: () {
+    child: GestureDetector(
+    onTap: () {
 
-                            Navigator.push(context,
-                                    MaterialPageRoute(builder: (context) => Addcategory()));
-                          },
-                          child: Text("اضافه تصنيف جديد",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                  color: Colors.white)),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+    Navigator.push(context,
+    MaterialPageRoute(builder: (context) => Addcategory()));
+    },
+    child: Text("اضافه تصنيف جديد",
+    style: TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 20,
+    color: Colors.white)),
+    ),
+    )
+    ],
+    ),
+    ),
+    ),
+    ],
+    ),
+    ),
+    ),
     );
   }
 }
+
+
+
+
+// Padding(
+      //   padding: const EdgeInsets.all(8.0),
+      //   child: Container(
+      //     // height: 700,
+      //     width: MediaQuery.of(context).size.width,
+      //     child: ListView.builder(
+      //         // itemCount: data!.length,
+      //         // itemBuilder: (BuildContext context,  int index) {
+      //         //   return
+      //         //     ListTile(
+      //         //         title: Text('data'),
+      //         //         leading: InkWell(onTap: (){
+      //         //     // getImg(snap.data![index]['use_id']);
+      //         //   },
+      //         //   child: CircleAvatar(radius: 20,
+      //         //   // foregroundImage: NetworkImage('http://192.168.43.68/flutter_restrant/library/${snap.data![index]['image']}'),
+      //         //   child: Text( 'data2'))));
+      //
+      //
+      //           itemCount: data.length,
+      //         itemBuilder: (BuildContext context,index ) {
+      //           return
+      //               ListTile(
+      //                 title: Text('ASASA'),////////////////
+      //                 // (data[index]['cat_name'].toString()
+      //                   // list[index]['cat_name']
+      //                 subtitle: Text('data'),///////////////////
+      //                   // data[index]['cat_kind']
+      //              );
+      //           //   SingleProduct(
+      //           //   pro_id: myprod[index]['pro_id'],
+      //           //   pro_image: myprod[index]['pro_image'],
+      //           //   pro_name: myprod[index]['pro_name'],
+      //           //   pro_price: myprod[index]['pro_price'],
+      //           //   pro_opg: myprod[index]['pro_opg'],
+      //           // );
+      //            }),
+      //   ),
+      // ),
+      //
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////
+
+
 
 // class SingleProduct extends StatelessWidget {
 //   final pro_id;

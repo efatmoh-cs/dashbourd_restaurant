@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -14,6 +16,37 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+
+  TextEditingController name=TextEditingController();
+  TextEditingController mobile=TextEditingController();
+
+  get http => null;
+
+  Future<void> loginUser(String name, String mobile) async {
+    final url = 'http://192.168.43.68/flutter_restrant/library/login.php'; // Replace with your PHP backend URL
+
+    final response = await http.post(
+      Uri.parse(url),
+      body: {
+        'name': name,
+        'mobile': mobile,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      if (responseData['status'] == 'success') {
+        // Login successful, navigate to another screen or show success
+        print('Login successful');
+      } else {
+        // Login failed, show error message
+        print('Login failed: ${responseData['message']}');
+      }
+    } else {
+      print('Error: ${response.statusCode}');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(backgroundColor: Colors.white,
@@ -60,6 +93,7 @@ class _LoginState extends State<Login> {
                               child: Padding(
                                 padding: const EdgeInsets.only(right: 10.0),
                                 child: TextFormField(textAlign: TextAlign.right,
+                                  controller: name,
                                   decoration: InputDecoration(
                                     hintText: 'الاسم بالكامل',
                                     border: InputBorder.none,
@@ -90,20 +124,21 @@ class _LoginState extends State<Login> {
                                 children: [
                                   Expanded(
                                     child: TextFormField(textAlign: TextAlign.right,
+                                      controller: mobile,
                                       decoration: InputDecoration(
                                         hintText: 'كلمه المرور',
                                         border: InputBorder.none,
                                       ),
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Please enter an email address';
-                                        }
-                                        final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-                                        if (!emailRegex.hasMatch(value)) {
-                                          return 'الرجاء ادخال البريد الالكتروني';
-                                        }
-                                        return null;
-                                      },
+                                      // validator: (value) {
+                                      //   if (value == null || value.isEmpty) {
+                                      //     return 'Please enter an email address';
+                                      //   }
+                                      //   final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+                                      //   if (!emailRegex.hasMatch(value)) {
+                                      //     return 'الرجاء ادخال البريد الالكتروني';
+                                      //   }
+                                      //   return null;
+                                      // },
                                     ),
                                   ),
 
@@ -116,8 +151,10 @@ class _LoginState extends State<Login> {
 
                       MaterialButton(
                         onPressed: () {
-                          Navigator.pushReplacement(context,
-                              MaterialPageRoute(builder: (context) => Home()));
+                          print(name.text);
+                          print(mobile.text);
+                          // Navigator.pushReplacement(context,
+                          //     MaterialPageRoute(builder: (context) => Home()));
                         },
                         child: Padding(
                           padding: const EdgeInsets.only(top: 20, left: 8, right: 8),
@@ -155,3 +192,6 @@ class _LoginState extends State<Login> {
         ));
   }
 }
+
+
+

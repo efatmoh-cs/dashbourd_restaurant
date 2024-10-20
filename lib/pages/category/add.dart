@@ -1,7 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-
+import 'package:http/http.dart' as http;
 
 
 import '../home.dart';
@@ -14,6 +16,37 @@ class Addcategory extends StatefulWidget {
 }
 
 class _AddcategoryState extends State<Addcategory> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _kindController = TextEditingController();
+
+////////////////////////add data///////////////
+  Future<void> _insertData() async {
+    final String name = _nameController.text;
+    final String kind = _kindController.text;
+
+    final response = await http.post(
+      Uri.parse('https://192.168.43.68/flutter_restrant/library/send.php'), // Replace with your server's URL
+      body: {
+        'name': name,
+        'kind': kind,
+      },
+    );
+
+    final data = json.decode(response.body);
+
+    if (data['success']) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(data['message']),
+      ));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(data['message']),
+      ));
+    }
+  }
+
+
+
   final _phoneRegExp = RegExp(r'^\+?[0-9]{10,15}$');
   @override
   Widget build(BuildContext context) {
@@ -53,7 +86,7 @@ class _AddcategoryState extends State<Addcategory> {
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.only(right: 10.0),
-                                  child: TextFormField(
+                                  child: TextFormField(controller: _nameController,
                                     textAlign: TextAlign.right,
                                     decoration: InputDecoration(
                                       hintText: 'اسم التصنيف',
@@ -80,9 +113,10 @@ class _AddcategoryState extends State<Addcategory> {
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.only(right: 10.0),
-                                child: TextFormField(
+                                child: TextFormField(controller: _kindController,
                                     textAlign: TextAlign.right,
                                     decoration: InputDecoration(
+
                                       hintText: 'السم بالانجليزي',
                                       border: InputBorder.none,
                                     ),
@@ -130,7 +164,9 @@ class _AddcategoryState extends State<Addcategory> {
                               ),
                             )),
                         MaterialButton(
-                          onPressed: () {
+                          onPressed: () {print(_nameController.text);
+                          print(_kindController.text);
+                          _insertData();
                             // Navigator.push(context,
                             //     MaterialPageRoute(builder: (context) => Login()));
                           },

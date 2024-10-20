@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:dashbourd_resturant/pages/category/category.dart';
 
 import 'category/category.dart';
 
@@ -215,7 +216,7 @@ class _HomeState extends State<Home> {
                   child: Expanded(
                     child: GestureDetector(onTap: (){
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => category()));
+                          MaterialPageRoute(builder: (context) => product()));
                     },
                       child: Column(
                         children: [

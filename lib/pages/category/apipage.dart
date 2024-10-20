@@ -279,7 +279,7 @@ return AlertDialog(
               ListTile(
                 title: Text(data[index]['use_name']),
                 leading: InkWell(onTap: (){
-                  getImg(data[index]['use_id']);
+                  getImg(snap.data![index]['use_id']);
                 },
                   child: CircleAvatar(radius: 20,
                      // foregroundImage: NetworkImage('http://192.168.43.68/flutter_restrant/library/${snap.data![index]['image']}'),

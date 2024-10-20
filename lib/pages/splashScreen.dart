@@ -1,7 +1,9 @@
 import 'package:dashbourd_resturant/pages/category/apipage.dart';
+import 'package:dashbourd_resturant/pages/category/category.dart';
 import 'package:flutter/material.dart';
 
 import 'acount/login.dart';
+import 'category/catttegory.dart';
 import 'home.dart';
 
 
@@ -41,7 +43,7 @@ class _splashScreenState extends State<splashScreen> {
                 SizedBox(height: 20,),
 
                 GestureDetector( onTap: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Homepage()));
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Login()));
                 },
                   child: Text('القائمة الرئيسية',style: TextStyle(color: Colors.white,fontSize: 38,fontWeight: FontWeight.bold),),
 
